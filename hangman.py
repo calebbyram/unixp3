@@ -5,6 +5,7 @@ from tkinter import *
 image = "hang0.png"
 chosenWord = ""
 guessedLetters = []
+guessedWords = []
 
 def randomNewWord():
     with open('words.txt') as file:
@@ -21,6 +22,13 @@ def guessLetter(letter):
     if letter not in guessedLetters:
         guessedLetters.append(letter)
         return letter in chosenWord
+    return True
+
+"same as guessLetter but for words"
+def guessWord(word):
+    if word not in guessedWords:
+        guessedWords.append(word)
+        return word == chosenWord
     return True
 
 "returns a string of underscores and correctly guessed letters corresponding to the chosen word"
@@ -45,6 +53,18 @@ def getCorrectGuesses():
             orderedGuess.append(letters)
     return orderedGuess
 
+"returns if all letters have been guessed correctly, or if the chosen word has been guessed"
+def gameWon():
+    if chosenWord in guessedWords:
+        return True
+    for letter in chosenWord:
+        if letter not in guessedLetters:
+            return False
+    return True
+def gameLost():
+    return len(getIncorrectGuesses()) > 5
+    
+
 window = Tk()
 window.title("Hangman")
 window.geometry("600x400")
@@ -59,6 +79,7 @@ tkinter.Label(window, text="Guess Letter/Word").grid(row=2, column=1)
 userGuess = tkinter.Entry(window)
 userGuess.grid(row=2, column=2)
 
+#testing functions here
 randomNewWord()
 guessLetter("a")
 guessLetter("e")
