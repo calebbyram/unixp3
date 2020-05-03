@@ -19,8 +19,28 @@ def chooseNewWord():
     userWordString = userWord.get()
     chosenWord = userWordString
 
+def guess():
+    input = userGuess.get()
+    if(len(input) == 1):
+        guessLetter(input)
+    if(len(input) > 1):
+        guessWord(input)
 
-"add a letter to the list of guessed letters. Returns false for new incorrect guesses, else true"
+    getWordProgress()
+    counter = len(getIncorrectGuesses())
+
+    if(counter > 0):
+        global image
+        image = "hang" + str(counter) + ".png"
+
+        icon = tkinter.PhotoImage(file=image)
+        gameImageLabel.config(image=icon)
+        gameImageLabel.image = icon
+    #turnsLeft.config(text="Turns Left: " + str(6 - badCounter))
+    #if (counter == 6):
+        #displayLose()
+
+#"add a letter to the list of guessed letters. Returns false for new incorrect guesses, else true"
 def guessLetter(letter):
     if letter not in guessedLetters:
         guessedLetters.append(letter)
@@ -37,11 +57,12 @@ def guessWord(word):
 "returns a string of underscores and correctly guessed letters corresponding to the chosen word"
 def getWordProgress():
     # underscores = "_"*len(chosenWord)
-    global guessWordLabel
     underscores = [c if c in guessedLetters else "_" for c in chosenWord]
     str1 = " "
-    print("getWordProgress: ", str1.join(underscores))
-    return (str1.join(underscores))
+    str2 = str1.join(underscores)
+    print("getWordProgress: ", str2)
+    guessWordLabel.config(text=str2)
+    #return (str1.join(underscores))
 
 
 "returns a list of each incorrectly guessed letter"
@@ -76,7 +97,7 @@ window.title("Hangman")
 window.geometry("600x400")
 
 randomNewWord()
-userWordProgress = getWordProgress()
+print("chosen word: ", chosenWord)
 
 # Game image initial
 gameImage = tkinter.PhotoImage(file=image)
@@ -88,34 +109,35 @@ tkinter.Label(window, text="Guess Letter/Word").grid(row=3, column=1)
 userGuess = tkinter.Entry(window)
 userGuess.grid(row=3, column=2)
 
-#submit user guess
-tkinter.Button(window, text="Submit", command=guessLetter(userGuess.get())).grid(row=3, column=3)
-
 #User custom word selection
 userWord = tkinter.Entry(window)
 userWord.grid(row=0, column=1)
 tkinter.Button(window, text="Choose Word", command=chooseNewWord()).grid(row=0, column=2)
 
 #display the current guess progress
-guessWordLabel = Label(window, text=userWordProgress)
+guessWordLabel = Label(window)
+guessWordLabel.config(text=getWordProgress())
 guessWordLabel.grid(row=1, column =2)
 tkinter.Label(window, text="WORD: ").grid(row=1, column=1)
 
+#submit user guess
+tkinter.Button(window, text="Submit", command=guess).grid(row=3, column=3)
+
 # testing functions here
-randomNewWord()
-guessLetter("a")
-guessLetter("e")
-guessLetter("i")
-guessLetter("o")
-guessLetter("u")
-guessLetter("y")
-guessLetter("s")
-guessLetter("r")
-guessLetter("t")
-print(chosenWord)
-print(getIncorrectGuesses())
-print(getCorrectGuesses())
-print(getWordProgress())
+#randomNewWord()
+#guessLetter("a")
+#guessLetter("e")
+#guessLetter("i")
+#guessLetter("o")
+#guessLetter("u")
+#guessLetter("y")
+#guessLetter("s")
+#guessLetter("r")
+#guessLetter("t")
+#print(chosenWord)
+#print(getIncorrectGuesses())
+#print(getCorrectGuesses())
+#print(getWordProgress())
 
 window.mainloop()
 
