@@ -3,6 +3,8 @@ import tkinter
 from tkinter import *
 
 image = "hang0.png"
+chosenWord = ""
+guessedLetters = set([])
 
 window = Tk()
 window.title("Hangman")
@@ -19,9 +21,6 @@ userGuess = tkinter.Entry(window)
 userGuess.grid(row=2, column=2)
 
 window.mainloop()
-
-chosenWord = ""
-guessedLetters = set([])
 
 
 def choseNewWord():
