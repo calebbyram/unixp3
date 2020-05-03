@@ -6,7 +6,11 @@ window = Tk()
 window.title("Hangman")
 window.geometry("600x400")
 
-#window.mainloop()
+gameImage = tkinter.PhotoImage(file=image)
+gameImageLabel = tkinter.Label(window, image=gameImage)
+gameImageLabel.grid(row=0, column=0)
+
+window.mainloop()
 
 chosenWord = ""
 guessedLetters = set([])
