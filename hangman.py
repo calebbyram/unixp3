@@ -18,6 +18,7 @@ def chooseNewWord():
     global chosenWord
     userWordString = userWord.get()
     chosenWord = userWordString
+    getWordProgress()
 
 def guess():
     input = userGuess.get()
@@ -47,25 +48,28 @@ def guessLetter(letter):
         return letter in chosenWord
     return True
 
-"same as guessLetter but for words"
+#"same as guessLetter but for words"
 def guessWord(word):
     if word not in guessedWords:
         guessedWords.append(word)
         return word == chosenWord
     return True
 
-"returns a string of underscores and correctly guessed letters corresponding to the chosen word"
+#"returns a string of underscores and correctly guessed letters corresponding to the chosen word"
 def getWordProgress():
     # underscores = "_"*len(chosenWord)
+    print("chosenWord: ", chosenWord)
     underscores = [c if c in guessedLetters else "_" for c in chosenWord]
     str1 = " "
     str2 = str1.join(underscores)
+    if chosenWord in guessedWords:
+        str2 = chosenWord
     print("getWordProgress: ", str2)
     guessWordLabel.config(text=str2)
     #return (str1.join(underscores))
 
 
-"returns a list of each incorrectly guessed letter"
+#"returns a list of each incorrectly guessed letter"
 def getIncorrectGuesses():
     orderedBadGuess = []
     for letters in guessedLetters:
@@ -80,7 +84,7 @@ def getCorrectGuesses():
             orderedGuess.append(letters)
     return orderedGuess
 
-"returns if all letters have been guessed correctly, or if the chosen word has been guessed"
+#"returns if all letters have been guessed correctly, or if the chosen word has been guessed"
 def gameWon():
     if chosenWord in guessedWords:
         return True
@@ -112,7 +116,7 @@ userGuess.grid(row=3, column=2)
 #User custom word selection
 userWord = tkinter.Entry(window)
 userWord.grid(row=0, column=1)
-tkinter.Button(window, text="Choose Word", command=chooseNewWord()).grid(row=0, column=2)
+tkinter.Button(window, text="Choose Word", command=chooseNewWord).grid(row=0, column=2)
 
 #display the current guess progress
 guessWordLabel = Label(window)
