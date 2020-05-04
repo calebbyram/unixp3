@@ -32,7 +32,9 @@ def guess():
     getWordProgress()
     counter = len(getIncorrectGuesses()) + len(getIncorrectWord())
 
-    if(counter > 0):
+    if(counter > 0 and counter < 7):
+        if gameLost():
+            gameLosePopUp()
         displayBadGuesses()
         global image
         image = "hang" + str(counter) + ".png"
@@ -62,10 +64,11 @@ def getWordProgress():
     underscores = [c if c in guessedLetters else "_" for c in chosenWord]
     str1 = " "
     str2 = str1.join(underscores)
-    if chosenWord in guessedWords:
+    if gameWon():
         gameWonPopUp()
+    if chosenWord in guessedWords:
         str2 = chosenWord
-    print("getWordProgress: ", str2)
+    #print("getWordProgress: ", str2)
     guessWordLabel.config(text=str2)
     #return (str1.join(underscores))
 
@@ -130,11 +133,43 @@ def gameWonPopUp():
     toplevelWin = Toplevel()
     Winlabel1 = Label(toplevelWin, text="You Win!")
     Winlabel1.pack()
-    Winlabel2 = Label(toplevelWin, text=("Word Was: ",chosenWord))
+    labelText = "Word Was: " + str(chosenWord)
+    Winlabel2 = Label(toplevelWin, text=labelText, width = 50)
     Winlabel2.pack()
 
+    def closeWindowOnWin():
+        toplevelWin.destroy()
+        window.destroy()
+    def resetWindow():
+        toplevelWin.destroy()
+        reset()
+
+    quitButton = Button(toplevelWin, text="Quit", command = closeWindowOnWin)
+    resetButton = Button(toplevelWin, text = "Reset Game", command = resetWindow)
+    quitButton.pack()
+    resetButton.pack()
+
+
 def gameLosePopUp():
-    print("")
+    toplevelLose = Toplevel()
+    Loselabel1 = Label(toplevelLose, text="You Lose!")
+    Loselabel1.pack()
+    labelText = "Word Was: " + str(chosenWord)
+    Loselabel2 = Label(toplevelLose, text=labelText, width=50)
+    Loselabel2.pack()
+
+    def closeWindowOnLose():
+        toplevelLose.destroy()
+        window.destroy()
+
+    def resetWindow():
+        toplevelLose.destroy()
+        reset()
+
+    quitButton = Button(toplevelLose, text="Quit", command=closeWindowOnLose)
+    resetButton = Button(toplevelLose, text="Reset Game", command=resetWindow)
+    quitButton.pack()
+    resetButton.pack()
 
 def displayChosenWord():
     guessWord(chosenWord)
@@ -145,7 +180,7 @@ window.title("Hangman")
 window.geometry("600x400")
 
 randomNewWord()
-print("chosen word: ", chosenWord)
+#print("chosen word: ", chosenWord)
 
 # Game image initial
 gameImage = tkinter.PhotoImage(file=image)
