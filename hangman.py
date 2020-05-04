@@ -14,13 +14,16 @@ def randomNewWord():
     chosenWord = random.choice(wordDict)
 
 def chooseNewWord():
+    reset()
     global chosenWord
     userWordString = userWord.get()
     chosenWord = userWordString
     getWordProgress()
+    userWord.delete(0, 'end')
 
 def guess():
     input = userGuess.get()
+    userGuess.delete(0, 'end')
     if(len(input) == 1):
         guessLetter(input)
     if(len(input) > 1):
@@ -30,15 +33,13 @@ def guess():
     counter = len(getIncorrectGuesses()) + len(getIncorrectWord())
 
     if(counter > 0):
+        displayBadGuesses()
         global image
         image = "hang" + str(counter) + ".png"
 
         icon = tkinter.PhotoImage(file=image)
         gameImageLabel.config(image=icon)
         gameImageLabel.image = icon
-    #turnsLeft.config(text="Turns Left: " + str(6 - badCounter))
-    #if (counter == 6):
-        #displayLose()
 
 #"add a letter to the list of guessed letters. Returns false for new incorrect guesses, else true"
 def guessLetter(letter):
@@ -62,6 +63,7 @@ def getWordProgress():
     str1 = " "
     str2 = str1.join(underscores)
     if chosenWord in guessedWords:
+        gameWonPopUp()
         str2 = chosenWord
     print("getWordProgress: ", str2)
     guessWordLabel.config(text=str2)
@@ -79,7 +81,7 @@ def getIncorrectGuesses():
 def getIncorrectWord():
     orderedBadGuess = []
     for letters in guessedWords:
-        if letters != guessedWords:
+        if letters != chosenWord:
             orderedBadGuess.append(letters)
     return orderedBadGuess
 
@@ -111,6 +113,32 @@ def reset():
     global guessedWords
     guessedWords = []
 
+    getWordProgress()
+
+    icon = tkinter.PhotoImage(file=image)
+    gameImageLabel.config(image=icon)
+    gameImageLabel.image = icon
+
+    badGuessLetters.config(text="")
+
+def displayBadGuesses():
+    str1 = ","
+    str2 = str1.join(getIncorrectGuesses())
+    badGuessLetters.config(text=str2)
+
+def gameWonPopUp():
+    toplevelWin = Toplevel()
+    Winlabel1 = Label(toplevelWin, text="You Win!")
+    Winlabel1.pack()
+    Winlabel2 = Label(toplevelWin, text=("Word Was: ",chosenWord))
+    Winlabel2.pack()
+
+def gameLosePopUp():
+    print("")
+
+def displayChosenWord():
+    guessWord(chosenWord)
+    getWordProgress()
 
 window = Tk()
 window.title("Hangman")
@@ -130,9 +158,10 @@ userGuess = tkinter.Entry(window)
 userGuess.grid(row=3, column=2)
 
 #User custom word selection
+tkinter.Label(window, text="Custom Word: ").grid(row=0, column=1)
 userWord = tkinter.Entry(window)
-userWord.grid(row=0, column=1)
-tkinter.Button(window, text="Choose Word", command=chooseNewWord).grid(row=0, column=2)
+userWord.grid(row=0, column=2)
+tkinter.Button(window, text="Choose", command=chooseNewWord).grid(row=0, column=3)
 
 #display the current guess progress
 guessWordLabel = Label(window)
@@ -142,6 +171,22 @@ tkinter.Label(window, text="WORD: ").grid(row=1, column=1)
 
 #submit user guess
 tkinter.Button(window, text="Submit", command=guess).grid(row=3, column=3)
+
+#reset button
+tkinter.Button(window, text="Reset", command=reset).grid(row=3, column=0)
+
+#Reveal button
+tkinter.Button(window, text="Reveal", command=displayChosenWord).grid(row=4, column=0)
+
+#display bad guesses
+badGuessLabel = Label(window)
+badGuessLabel.config(text="Guesses: ")
+badGuessLabel.grid(row=4, column =1)
+
+
+badGuessLetters = Label(window)
+badGuessLetters.grid(row=4, column=2)
+
 
 window.mainloop()
 
