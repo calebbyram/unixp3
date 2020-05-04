@@ -6,7 +6,6 @@ image = "hang0.png"
 chosenWord = ""
 guessedLetters = []
 guessedWords = []
-displayWord = ""
 
 def randomNewWord():
     with open('words.txt') as file:
@@ -28,7 +27,7 @@ def guess():
         guessWord(input)
 
     getWordProgress()
-    counter = len(getIncorrectGuesses())
+    counter = len(getIncorrectGuesses()) + len(getIncorrectWord())
 
     if(counter > 0):
         global image
@@ -77,6 +76,13 @@ def getIncorrectGuesses():
             orderedBadGuess.append(letters)
     return orderedBadGuess
 
+def getIncorrectWord():
+    orderedBadGuess = []
+    for letters in guessedWords:
+        if letters != guessedWords:
+            orderedBadGuess.append(letters)
+    return orderedBadGuess
+
 def getCorrectGuesses():
     orderedGuess = []
     for letters in guessedLetters:
@@ -94,7 +100,17 @@ def gameWon():
     return True
 
 def gameLost():
-    return len(getIncorrectGuesses()) > 5
+    return len(getIncorrectGuesses()) + len(getIncorrectWord()) > 5
+
+def reset():
+    global image
+    image = "hang0.png"
+    randomNewWord()
+    global guessedLetters
+    guessedLetters = []
+    global guessedWords
+    guessedWords = []
+
 
 window = Tk()
 window.title("Hangman")
@@ -126,22 +142,6 @@ tkinter.Label(window, text="WORD: ").grid(row=1, column=1)
 
 #submit user guess
 tkinter.Button(window, text="Submit", command=guess).grid(row=3, column=3)
-
-# testing functions here
-#randomNewWord()
-#guessLetter("a")
-#guessLetter("e")
-#guessLetter("i")
-#guessLetter("o")
-#guessLetter("u")
-#guessLetter("y")
-#guessLetter("s")
-#guessLetter("r")
-#guessLetter("t")
-#print(chosenWord)
-#print(getIncorrectGuesses())
-#print(getCorrectGuesses())
-#print(getWordProgress())
 
 window.mainloop()
 
