@@ -1,5 +1,5 @@
 import random
-import tkinter
+#import tkinter
 from tkinter import *
 
 image = "hang0.png"
@@ -39,7 +39,7 @@ def guess():
         global image
         image = "hang" + str(counter) + ".png"
 
-        icon = tkinter.PhotoImage(file=image)
+        icon = PhotoImage(file=image)
         gameImageLabel.config(image=icon)
         gameImageLabel.image = icon
 
@@ -60,7 +60,7 @@ def guessWord(word):
 #"returns a string of underscores and correctly guessed letters corresponding to the chosen word"
 def getWordProgress():
     # underscores = "_"*len(chosenWord)
-    print("chosenWord: ", chosenWord)
+    #print("chosenWord: ", chosenWord)
     underscores = [c if c in guessedLetters else "_" for c in chosenWord]
     str1 = " "
     str2 = str1.join(underscores)
@@ -118,7 +118,7 @@ def reset():
 
     getWordProgress()
 
-    icon = tkinter.PhotoImage(file=image)
+    icon = PhotoImage(file=image)
     gameImageLabel.config(image=icon)
     gameImageLabel.image = icon
 
@@ -183,35 +183,35 @@ randomNewWord()
 #print("chosen word: ", chosenWord)
 
 # Game image initial
-gameImage = tkinter.PhotoImage(file=image)
-gameImageLabel = tkinter.Label(window, image=gameImage)
+gameImage = PhotoImage(file=image)
+gameImageLabel = Label(window, image=gameImage)
 gameImageLabel.grid(row=1, column=0)
 
 # Guess entry box and label
-tkinter.Label(window, text="Guess Letter/Word").grid(row=3, column=1)
-userGuess = tkinter.Entry(window)
+Label(window, text="Guess Letter/Word").grid(row=3, column=1)
+userGuess = Entry(window)
 userGuess.grid(row=3, column=2)
 
 #User custom word selection
-tkinter.Label(window, text="Custom Word: ").grid(row=0, column=1)
-userWord = tkinter.Entry(window)
+Label(window, text="Custom Word: ").grid(row=0, column=1)
+userWord = Entry(window)
 userWord.grid(row=0, column=2)
-tkinter.Button(window, text="Choose", command=chooseNewWord).grid(row=0, column=3)
+Button(window, text="Choose", command=chooseNewWord).grid(row=0, column=3)
 
 #display the current guess progress
 guessWordLabel = Label(window)
 guessWordLabel.config(text=getWordProgress())
 guessWordLabel.grid(row=1, column =2)
-tkinter.Label(window, text="WORD: ").grid(row=1, column=1)
+Label(window, text="WORD: ").grid(row=1, column=1)
 
 #submit user guess
-tkinter.Button(window, text="Submit", command=guess).grid(row=3, column=3)
+Button(window, text="Submit", command=guess).grid(row=3, column=3)
 
 #reset button
-tkinter.Button(window, text="Reset", command=reset).grid(row=3, column=0)
+Button(window, text="Reset", command=reset).grid(row=3, column=0)
 
 #Reveal button
-tkinter.Button(window, text="Reveal", command=displayChosenWord).grid(row=4, column=0)
+Button(window, text="Reveal", command=displayChosenWord).grid(row=4, column=0)
 
 #display bad guesses
 badGuessLabel = Label(window)
@@ -224,7 +224,3 @@ badGuessLetters.grid(row=4, column=2)
 
 
 window.mainloop()
-
-
-
-
